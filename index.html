@@ -1,51 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Widget | Extensions Demo</title>
-  <style>
-    body {
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-    }
-    #confetti-canvas {
-      position: fixed;
-      z-index: 999;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="confetti-canvas"></canvas>
-  <div id="voiceflow-chat"></div>
+<html>
+  <head>
+    <title>Chat Widget | Extensions Demo</title>
+    <style>
+      body {
+        background-color: #f9f9f9;
+      }
+      #flat-chat {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      #confetti-canvas {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="confetti-canvas"></canvas>
+    <div id="flat-chat"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <script>
-    (function (d, t) {
-      const v = d.createElement(t);
-      const s = d.getElementsByTagName(t)[0];
-      v.onload = function () {
-        window.voiceflow.chat.load({
-          verify: { projectID: '676a74ca16548ff31c8f28a9' }, // Replace with your project ID
-          url: 'https://general-runtime.voiceflow.com',
-          versionID: 'production',
-          user: { name: 'Demo User' },
-          render: {
-            mode: 'overlay',
-          },
-          autostart: true,
-        });
-      };
-      v.src = 'https://cdn.voiceflow.com/widget/bundle.mjs';
-      v.type = 'text/javascript';
-      s.parentNode.insertBefore(v, s);
-    })(document, 'script');
-  </script>
-</body>
+    <!-- Updated the ID here from 'voiceflow-chat-frame' to 'voiceflow-chat' -->
+    <div id="voiceflow-chat"></div>
+
+    <!-- Keep your confetti script -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Make this script a module so imports work -->
+    <script type="module">
+      import {
+        DisableInputExtension,
+        VideoExtension,
+        TimerExtension,
+        FormExtension,
+        MapExtension,
+        FileUploadExtension,
+        KBUploadExtension,
+        DateExtension,
+        ConfettiExtension,
+        FeedbackExtension
+      } from './extensions.js';
+
+      (function (d, t) {
+        const v = d.createElement(t);
+        const s = d.getElementsByTagName(t)[0];
+
+        v.onload = function () {
+          window.voiceflow.chat.load({
+            verify: { projectID: '676a74ca16548ff31c8f28a9' },
+            url: 'https://general-runtime.voiceflow.com',
+            versionID: '676a74ca16548ff31c8f28aa',
+            user: {
+              name: 'Demo User',
+            },
+            render: {
+              mode: 'overlay',
+            },
+            autostart: true,
+            allowDangerousHTML: true,
+            assistant: {
+              extensions: [
+                DisableInputExtension,
+                VideoExtension,
+                TimerExtension,
+                FormExtension,
+                MapExtension,
+                FileUploadExtension,
+                KBUploadExtension,
+                DateExtension,
+                ConfettiExtension,
+                FeedbackExtension,
+              ],
+            },
+          });
+        };
+
+        // Important: Use type 'module' so the browser treats it as an ES module
+        v.type = 'module';
+        v.src = 'https://cdn.voiceflow.com/widget/bundle.mjs';
+
+        s.parentNode.insertBefore(v, s);
+      })(document, 'script');
+    </script>
+  </body>
 </html>
